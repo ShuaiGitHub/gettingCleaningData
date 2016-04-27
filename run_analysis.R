@@ -1,4 +1,4 @@
-#initilizae
+#initilizae please 
 mainDir<-"./UCI HAR Dataset/"
 testDir<-"./UCI HAR Dataset/test/"
 #create names for files
@@ -32,5 +32,8 @@ selectedFeature<-gsub("-std[-()]*","Std",selectedFeature)
 fullFeature<-unlist(c(list("ID","Activity"),selectedFeature))
 fullData<-cbind(fullSubject,fullOutcome,selectMeasure)
 colnames(fullData)<-fullFeature
+##finish assigning names
+#create tidy data set
 mdata<-melt(fullData,id=c("ID","Activity"))
+###generate summary statstics
 Summary<-dcast(mdata,ID+Activity~variable,mean)
