@@ -15,9 +15,9 @@ trainData <-read.table(train_name,header=F)
 require(dplyr)
 testData <-read.table(test_name,header=F)
 trainActivityName<-sub("X","Y",train_name)
-trainOutcome<-read.table(trainActivityName,header=F)
+trainOutcome<-read.table(trainActivityName,colClasses="factor",header=F)
 testActivityName<-sub("X","Y",test_name)
-testOutcome<-read.table(testActivityName,header=F)
+testOutcome<-read.table(testActivityName,header=F,colClasses="factor")
 featureData<-read.table(feature_name,stringsAsFactors=F)
 
 #assign names
@@ -25,6 +25,8 @@ featureData<-read.table(feature_name,stringsAsFactors=F)
 fullMeasure<-rbind(trainData,testData)
 fullSubject<-rbind(subjectTrain,subjectTest)
 fullOutcome<-rbind(trainOutcome,testOutcome)
+fullOutcome<-factor(fullOutcome[[1]])
+fullOutcome<-revalue(fullOutcome,c("1"="WALKING","2"="WALKING_UPSTAIRS","3"="WALKING_DOWNSTAIRS","4"="SITTING","5"="STANDING","6"="LAYING"))
 #read candidate of names
 colnames(fullMeasure)<-featureData$V2
 #select only mean and std variables
@@ -42,6 +44,7 @@ fullData<-cbind(fullSubject,fullOutcome,selectMeasure)
 colnames(fullData)<-fullFeature
 ##finish assigning names
 #create tidy data set using melt function
+library(reshape2)
 mdata<-melt(fullData,id=c("ID","Activity"))
 ###generate summary statistics using dcast
 Summary<-dcast(mdata,ID+Activity~variable,mean)
