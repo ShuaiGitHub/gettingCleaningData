@@ -26,6 +26,7 @@ fullMeasure<-rbind(trainData,testData)
 fullSubject<-rbind(subjectTrain,subjectTest)
 fullOutcome<-rbind(trainOutcome,testOutcome)
 fullOutcome<-factor(fullOutcome[[1]])
+require(plyr)
 fullOutcome<-revalue(fullOutcome,c("1"="WALKING","2"="WALKING_UPSTAIRS","3"="WALKING_DOWNSTAIRS","4"="SITTING","5"="STANDING","6"="LAYING"))
 #read candidate of names
 colnames(fullMeasure)<-featureData$V2
@@ -48,4 +49,4 @@ library(reshape2)
 mdata<-melt(fullData,id=c("ID","Activity"))
 ###generate summary statistics using dcast
 Summary<-dcast(mdata,ID+Activity~variable,mean)
-write.table(Summary,file="tidy.csv",sep=",")
+write.table(Summary,file="tidy.txt",sep=",",row.name=F)
